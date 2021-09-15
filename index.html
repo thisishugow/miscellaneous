@@ -107,7 +107,7 @@
                 },
                 setItemCompleted(){
                     var itemId = document.getElementById('doneItem').value
-                    itemId = parseInt(itemId)
+                    itemId = parseInt(itemId)-1
                     this.messages[itemId].completed=true
                     // this.messages.forEach(element=>{
                     //     if (element.id == itemId){
