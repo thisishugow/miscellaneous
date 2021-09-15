@@ -44,7 +44,7 @@
     <h2>Done list</h2>
     <button class="w3-button w3-black w3-margin-bottom" v-on:click="removeAllDone">Remove all done items</button>
     <div v-for="i in doneList">
-        <span :class="{completed:i.completed}">{{i.id}} - {{ i.text }}</span>
+        <span :class="{completed:i.completed}">{{i.id+1}} - {{ i.text }}</span>
     </div>
     </div>
 
