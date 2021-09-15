@@ -25,8 +25,10 @@
 		<h3>{{ date }} Hugo</h3>
         <div v-for="i in messages">
             <input type="checkbox" v-model="i.completed">&nbsp&nbsp
-			<span :class="{completed:i.completed}" @dbclick="dbclickEdit">{{i.id+1}}. {{ i.text }}</span>
+			<span  style="" :class="{completed:i.completed}" v-bind:id="'span-'+String(i.id)" @dblclick.native="dbclickEdit(i.id)">{{i.id+1}}. {{ i.text }}</span>
+            <input style="display: none;" type="text" v-model="i.text" v-bind:id="'input-'+String(i.id)" @keyup.enter="saveChange(i.id)">
         </div>
+        <span style="font-size: smaller;color: rgb(163, 159, 159);">&ensp;double click to edit. &lt;enter&gt; to save </span>
         <input class="w3-input w3-border" type="text" id="newItem" @keyup.enter="addItemByEnter" placeholder="Input to add a new item (<shift> + <enter> to add)">
 		<button class="w3-button w3-black w3-margin-bottom" v-on:click="addItem">Add</button>
         <!-- <button v-on:click="reverseText">Reverse the text</button> -->
@@ -62,7 +64,9 @@
                         'color': 'grey'
                     },
                     doneList: [],
-					date: (today.getMonth()+1)+'/'+today.getDate()
+					date: (today.getMonth()+1)+'/'+today.getDate(),
+                    showing: {display: ""},
+                    editing: {display: "none"}
                 }
             },
             methods:{
@@ -81,9 +85,15 @@
 						this.addItem();
 					}
 				},
-				dbclickEdit(){
-				
+				dbclickEdit(itemId){
+                    document.getElementById('span-'+String(itemId)).style = "display: none"
+                    document.getElementById('input-'+String(itemId)).style = "display: true"
+
 				},
+                saveChange(itemId){
+                    document.getElementById('span-'+String(itemId)).style = "display: true"
+                    document.getElementById('input-'+String(itemId)).style = "display: none"
+                },
                 reverseText(){
                    this.messages.forEach(element => {
                         element.text = element.text.split('').reverse().join('').toUpperCase()
