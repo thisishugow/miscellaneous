@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@next"></script>
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+
+    <title>To Do List v2</title>
+    <style>
+        .completed {text-decoration: line-through; color: gray} 
+		input {margin: 5px}
+		button {margin: 5px}
+    </style>
+</head>
+<body style="padding: 50px;">
+    
+    <div class="w3-content" id="test1">
+		<h1>To do list v2</h1>
+        <!-- <p v-for="i in messages" :class="{completed:i.completed}">{{i.id}} - {{ i.text }}</p> -->
+		<h3>{{ date }} Hugo</h3>
+        <div v-for="i in messages">
+            <input type="checkbox" v-model="i.completed">&nbsp&nbsp
+			<span :class="{completed:i.completed}" @dbclick="dbclickEdit">{{i.id+1}}. {{ i.text }}</span>
+        </div>
+        <input class="w3-input w3-border" type="text" id="newItem" @keyup.enter="addItemByEnter" placeholder="Input to add a new item (<shift> + <enter> to add)">
+		<button class="w3-button w3-black w3-margin-bottom" v-on:click="addItem">Add</button>
+        <!-- <button v-on:click="reverseText">Reverse the text</button> -->
+        <button class="w3-button w3-black w3-margin-bottom" v-on:click="removeCompleted">Remove completed item(s)</button>
+		<button class="w3-button w3-black w3-margin-bottom" v-on:click="removeAll">Reset all text</button>
+        <br>
+        <br> <p>Delete the completed item.</p>
+        <input class="w3-half w3-input w3-border" type="text" id="doneItem" placeholder="Input the ID"> 
+		<button class="w3-button w3-black w3-margin-bottom" v-on:click="setItemCompleted">Enter</button>
+        <br>
+        <!-- <span :style="whichDone">測試中的一句話 (刪除線)</span> -->
+        <br>
+        <!-- <button v-on:click="resume">Resume all text</button> -->
+    <hr>
+    <h2>Done list</h2>
+    <button class="w3-button w3-black w3-margin-bottom" v-on:click="removeAllDone">Remove all done items</button>
+    <div v-for="i in doneList">
+        <span :class="{completed:i.completed}">{{i.id}} - {{ i.text }}</span>
+    </div>
+    </div>
+
+    <script>
+        const defaultTest =  [ {text:'this is a test text.', id:0, completed: false}, {text:'Another text.', id:1, completed: true}]
+        function copy(o){ return JSON.parse(JSON.stringify(o))}; //deep clone.
+        let itemId = 1
+		let today = new Date();
+        const test1 = {
+            data(){
+                return {
+                    messages: copy(defaultTest), //deep clone. 
+                    whichDone: {
+                        'text-decoration': 'line-through',
+                        'color': 'grey'
+                    },
+                    doneList: [],
+					date: (today.getMonth()+1)+'/'+today.getDate()
+                }
+            },
+            methods:{
+                addItem(){
+                    var newItem = document.getElementById('newItem').value
+                    itemId = itemId +1
+                    this.messages.push({
+                        text: newItem,
+                        id: itemId,
+                        completed: false
+                    })
+					document.getElementById('newItem').value = ''
+                },
+				addItemByEnter(e){
+					if(e.shiftKey && e.keyCode==13){
+						this.addItem();
+					}
+				},
+				dbclickEdit(){
+				
+				},
+                reverseText(){
+                   this.messages.forEach(element => {
+                        element.text = element.text.split('').reverse().join('').toUpperCase()
+                    }); 
+                },
+                removeAll(){
+                    this.messages = []
+                    itemId = -1
+                },
+                removeAllDone(){
+                    this.doneList = []
+                },
+                removeCompleted(){
+                    this.messages.filter(i=> i.completed==true).forEach(element=>{
+                        this.doneList.push(element)
+                    })
+                    this.messages = this.messages.filter(i=> i.completed==false)
+                },
+                resume(){
+                    this.messages = copy(defaultTest) //deep clone. 
+                },
+                setItemCompleted(){
+                    var itemId = document.getElementById('doneItem').value
+                    itemId = parseInt(itemId)
+                    this.messages[itemId].completed=true
+                    // this.messages.forEach(element=>{
+                    //     if (element.id == itemId){
+                    //         element.completed = true
+                    //     }
+                    // })
+                }
+            }
+        }
+
+        Vue.createApp(test1).mount('#test1')
+
+    </script>
+    
+</body>
+</html>
