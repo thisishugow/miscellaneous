@@ -140,6 +140,7 @@
 
 	function beforunload(event) { event = event ? event : (window.event ? window.event : null); 
 	var myIE = myBrowser(); 
+				     
 	if (myIE=="IE") { // IE 
 	var cy = event.clientY || event.target.event.clientY;
 	var ak = event.altKey || event.target.event.altKey; 
@@ -157,7 +158,7 @@
 	/*** * 獲取當前瀏覽器類型 */ 
 	function myBrowser() { 
 	var userAgent = navigator.userAgent; //取得瀏覽器的userAgent字符串 
-
+	console.log(userAgent)
 	var isOpera = userAgent.indexOf("Opera") > -1; 
 	if (isOpera) { //判斷是否Opera瀏覽器 
 	return "Opera"; }
