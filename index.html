@@ -131,6 +131,47 @@
         Vue.createApp(test1).mount('#test1')
 
     </script>
-    
+    <script>
+	//頁面離開或者瀏覽器關閉的時候給予提示 防止用戶誤操作 離開當前頁面未保存數據可能丟失 
+	window.onbeforeunload = function(event) { 
+	return beforunload(event); 
+	}; 
+
+
+	function beforunload(event) { event = event ? event : (window.event ? window.event : null); 
+	var myIE = myBrowser(); 
+	if (myIE=="IE") { // IE 
+	var cy = event.clientY || event.target.event.clientY;
+	var ak = event.altKey || event.target.event.altKey; 
+	if (cy < 0 || ak) { 
+	return "確定要離開本頁面嗎？"; }
+
+	} 
+
+	else {
+	// Firefox、Chrome
+	var nodeName = event.currentTarget.document.activeElement.nodeName; 
+	if (nodeName!="A") { return "確定要離開本頁面嗎？"; } } } 
+
+
+	/*** * 獲取當前瀏覽器類型 */ 
+	function myBrowser() { 
+	var userAgent = navigator.userAgent; //取得瀏覽器的userAgent字符串 
+
+	var isOpera = userAgent.indexOf("Opera") > -1; 
+	if (isOpera) { //判斷是否Opera瀏覽器 
+	return "Opera"; }
+
+	if (userAgent.indexOf("Firefox") > -1) { //判斷是否Firefox瀏覽器 
+	return "FF"; }
+	if (userAgent.indexOf("Chrome") > -1){ return "Chrome"; }
+	if (userAgent.indexOf("Safari") > -1) { //判斷是否Safari瀏覽器
+	return "Safari"; }
+	if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) { //判斷是否IE瀏覽器
+	return "IE"; }
+	}
+
+
+</script>
 </body>
 </html>
